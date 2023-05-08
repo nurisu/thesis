@@ -1,0 +1,71 @@
+<div class="pcoded-main-container">
+		  <div class="pcoded-wrapper">
+			 <div class="pcoded-content">
+				<div class="pcoded-inner-content">
+				   <div class="main-body">
+					  <div class="page-wrapper">
+						 <div class="row">
+							<div class="col-sm-12"> <div class="card"> <div class="card-header"> <h5>Карта</h5> </div> <div class="card-block" style="width:100%;height:810px"> <div id="mapdiv" style="width:100%;height:100%"></div></div> </div> </div>
+							<script src="static\OpenLayers-2.13.1\OpenLayers.js"></script>
+							<script>
+								map = new OpenLayers.Map("mapdiv");
+								map.addLayer(new OpenLayers.Layer.OSM());
+								
+								epsg4326 =  new OpenLayers.Projection("EPSG:4326"); //WGS 1984 projection
+								projectTo = map.getProjectionObject(); //The map projection (Spherical Mercator)
+							   
+								var lonLat = new OpenLayers.LonLat( 55.9251 ,53.6328 ).transform(epsg4326, projectTo);
+									  
+								
+								var zoom=14;
+								map.setCenter (lonLat, zoom);
+
+								var vectorLayer = new OpenLayers.Layer.Vector("Overlay");
+								
+								// Define markers as "features" of the vector layer:
+								{% for item in config.data %}
+								var feature = new OpenLayers.Feature.Vector(
+										new OpenLayers.Geometry.Point({{item.lon}} , {{item.lat}}).transform(epsg4326, projectTo),
+										{description:'{{ item.title }}<br><a href="camera/{{item.filename}}">Камера</a>'} ,
+										{externalGraphic: 'static/map-icon.png', graphicHeight: 25, graphicWidth: 21, graphicXOffset:-12, graphicYOffset:-25  }
+									);    
+								vectorLayer.addFeatures(feature);
+								{% endfor %}
+							   
+								map.addLayer(vectorLayer);
+							 
+								
+								//Add a selector control to the vectorLayer with popup functions
+								var controls = {
+								  selector: new OpenLayers.Control.SelectFeature(vectorLayer, { onSelect: createPopup, onUnselect: destroyPopup })
+								};
+
+								function createPopup(feature) {
+								  feature.popup = new OpenLayers.Popup.FramedCloud("pop",
+									  feature.geometry.getBounds().getCenterLonLat(),
+									  null,
+									  '<div class="markerContent" style="background-color: white;padding: 6px;border-radius: 10px;margin: 0px;border: 1px solid #cccccc;bottom: 12px;left: -50px;min-width: 280px;">'+feature.attributes.description+'</div>',
+									  null,
+									  true,
+									  function() { controls['selector'].unselectAll(); }
+								  );
+								  //feature.popup.closeOnMove = true;
+								  map.addPopup(feature.popup);
+								}
+
+								function destroyPopup(feature) {
+								  feature.popup.destroy();
+								  feature.popup = null;
+								}
+								
+								map.addControl(controls['selector']);
+								controls['selector'].activate();
+								  
+							</script>
+							</div>
+					  </div>
+				   </div>
+				</div>
+			 </div>
+		  </div>
+	   </div>

@@ -1,0 +1,193 @@
+<div class="pcoded-main-container">
+      <div class="pcoded-wrapper">
+         <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+               <div class="main-body">
+                  <div class="page-wrapper">
+                     <div class="row">
+                        <div class="col-md-6 col-xl-4">
+                           <div class="card daily-sales">
+                              <div class="card-block">
+                                 <h6 class="mb-4">Адрес</h6>
+                                 <div class="row d-flex align-items-center">
+                                    <div class="col-9">
+                                       <h3 class="f-w-300 d-flex align-items-center m-b-0">{{config.data.title}}</h3>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="col-md-6 col-xl-4">
+                           <div class="card Monthly-sales">
+                              <div class="card-block">
+                                 <h6 class="mb-4">Дата</h6>
+                                 <div class="row d-flex align-items-center">
+                                    <div class="col-9">
+                                       <h3 class="f-w-300 d-flex align-items-center  m-b-0" id="date-now">06.04.2023</h3>
+										<script type="text/javascript">
+
+										function currentDate() {
+										  let date = new Date(); 
+										  let d = date.getDay();
+										  let m = date.getMonth();
+										  let y = date.getYear();
+										
+										   d = (d < 10) ? "0" + d : d;
+										   m = (m < 10) ? "0" + m : m;
+										   y = 2000 + (y % 100);
+											
+										   let time = d + "." + m + "." + y;
+
+										  document.getElementById("date-now").innerText = time; 
+										}
+										currentDate();
+										</script>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="col-md-12 col-xl-4">
+                           <div class="card yearly-sales">
+                              <div class="card-block">
+                                 <h6 class="mb-4">Время</h6>
+                                 <div class="row d-flex align-items-center">
+                                    <div class="col-9">
+                                       <h3 class="f-w-300 d-flex align-items-center  m-b-0" id="time-now"></h3>
+									   <script type="text/javascript">
+
+										function currentTime() {
+										  let date = new Date(); 
+										  let hh = date.getHours();
+										  let mm = date.getMinutes();
+										  let ss = date.getSeconds();
+										
+										   hh = (hh < 10) ? "0" + hh : hh;
+										   mm = (mm < 10) ? "0" + mm : mm;
+										   ss = (ss < 10) ? "0" + ss : ss;
+											
+										   let time = hh + ":" + mm + ":" + ss;
+
+										  document.getElementById("time-now").innerText = time; 
+										  let t = setTimeout(function(){ currentTime() }, 1000);
+										}
+										currentTime();
+										</script>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="col-xl-8 col-md-6">
+                           <div class="card Recent-Users">
+                              <div class="card-header">
+                                 <h5>Видео с камеры</h5>
+                              </div>
+                              <div class="card-block px-0 py-3">
+                                 <div class="table-responsive"> <img src="/video" width="100%"> </div>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="col-xl-4 col-md-6">
+                           <div class="card card-event">
+								<div class="table-responsive"> <img src="/graph" width="100%"> </div>
+                           </div>
+                           <div class="card">
+                              <div class="card-block border-bottom">
+                                 <div class="row d-flex align-items-center">
+                                    <div class="col-auto"> </div>
+                                    <div class="col">
+                                       <h3 class="f-w-300" id="per-hour"></h3>
+                                       <span class="d-block text-uppercase">Проехало за час</span>
+										<script type="text/javascript">
+										var time_span = document.getElementById("per-hour");
+
+										function updater() {
+										  fetch('/perhour')
+										  .then(response => response.text())
+										  .then(text => (time_span.innerHTML = text));  // update page with new data
+										}
+
+										setInterval(updater, 1000);  // run `updater()` every 1000ms (1s)
+										</script>
+                                    </div>
+                                 </div>
+                              </div>
+                              <div class="card-block">
+                                 <div class="row d-flex align-items-center">
+                                    <div class="col-auto"> </div>
+                                    <div class="col">
+                                       <h3 class="f-w-300" id="per-minute"></h3>
+                                       <span class="d-block text-uppercase">Проехало за минуту</span> 
+									   
+									   <script type="text/javascript">
+										var time_span1 = document.getElementById("per-minute");
+
+										function updater1() {
+										  fetch('/perminute')
+										  .then(response => response.text())
+										  .then(text => (time_span1.innerHTML = text));  // update page with new data
+										}
+
+										setInterval(updater1, 1000);  // run `updater()` every 1000ms (1s)
+										</script>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                       
+					<div class="col-xl-12"> 
+						<div class="card"> 
+							<div class="card-header"> 
+								<h5>Таблица движений</h5> 
+							</div> 
+							<div class="card-block table-border-style"> 
+								<div class="table-responsive"> 
+									<table class="table table-hover"> 
+										<thead> 
+											<tr> 
+												<th>#</th>
+												<th>Направление</th> 
+												<th>За минуту</th> 
+												<th>За час</th> 
+												<th>За день</th> 
+											</tr> 
+										</thead> 
+										<tbody> 
+											<tr> 
+												<th scope="row">1</th> 
+												<td>Худайбердина - Ленина</td> 
+												<td>20</td>
+												<td>140</td> 
+												<td>3000</td> 
+											</tr> 
+											<tr> 
+												<th scope="row">2</th> 
+												<td>Ленина - Худайбердина</td> 
+												<td>25</td>
+												<td>165</td> 
+												<td>3350</td> 
+											</tr> 
+											<tr> 
+												<th scope="row">3</th> 
+												<td>Худайбердина - Октября</td> 
+												<td>15</td>
+												<td>95</td> 
+												<td>2050</td> 
+											</tr>
+										</tbody> 
+									</table>
+								</div> 
+							</div>
+						</div>
+					</div>
+
+                      
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
